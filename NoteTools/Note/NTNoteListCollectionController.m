@@ -11,7 +11,7 @@
 #import "NTNoteListCell.h"
 #import "NTNoteDetailViewController.h"
 
-@interface NTNoteListCollectionController ()
+@interface NTNoteListCollectionController ()<noteListCellDelegate>
 
 @property (nonatomic, strong) RLMResults *noteList;
 
@@ -85,6 +85,7 @@ static NSString * const reuseIdentifier = @"noteList";
     [collectionView registerNib:nib forCellWithReuseIdentifier:reuseIdentifier];
     
     NTNoteListCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.delegate = self;
     NTNoteDataModel *note = [self.noteList objectAtIndex:indexPath.item];
     cell.titleLabel.text = note.title;
 //    NSData *data = [NTUtilities loadContentFromLocal:note.content];
@@ -104,6 +105,24 @@ static NSString * const reuseIdentifier = @"noteList";
     NTNoteDataModel *note = [self.noteList objectAtIndex:indexPath.item];
     noteDetailVC.noteId = note.noteId;
     [self.navigationController pushViewController:noteDetailVC animated:YES];
+}
+
+-(void)noteListCell:(NTNoteListCell *)cell longPressCellToEdit:(NSString *)title
+{
+    UIAlertController *noteCell = [UIAlertController alertControllerWithTitle:@"文件：" message:title preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *noteDelete = [UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    UIAlertAction *noteCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [noteCell addAction:noteDelete];
+    [noteCell addAction:noteCancel];
+    [self presentViewController:noteCell animated:YES completion:nil];
+    
+}
+
+-(void)deleteNoteFromDataBase
+{
+    //TODO:删除文章内容
 }
 
 
