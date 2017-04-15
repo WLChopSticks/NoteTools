@@ -156,8 +156,24 @@
 -(void)insertImageBtnClicking
 {
     NSLog(@"点击了加载图片");
+    UIAlertController *insertImage = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *imageAlbum = [UIAlertAction actionWithTitle:@"从图库中选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self callImageAlbumBtnClicking];
+    }];
+    UIAlertAction *imageCamera = [UIAlertAction actionWithTitle:@"从相机获取" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self callImageCameraBtnClicking];
+    }];
+    UIAlertAction *imageCancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    [insertImage addAction:imageAlbum];
+    [insertImage addAction:imageCamera];
+    [insertImage addAction:imageCancel];
+    [self presentViewController:insertImage animated:YES completion:nil];
     
-    //TODO: 增加从图库中选择图片以及调用相机拍照
+}
+
+-(void)callImageAlbumBtnClicking
+{
+    NSLog(@"点击了调用图库");
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc]init];
         imagePicker.delegate = self;
@@ -168,7 +184,7 @@
     }
 }
 
--(void)CallCameraBtnClicking
+-(void)callImageCameraBtnClicking
 {
     NSLog(@"点击了调用摄像头");
     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
