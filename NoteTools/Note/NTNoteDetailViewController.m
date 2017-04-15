@@ -265,16 +265,17 @@
     NSRange range = [reference rangeOfString:@"id="];
     NSString *imageId = [reference substringFromIndex:(range.location + range.length)];
     
+    UIImage *chosenImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+    [self.imagesDict setObject:chosenImage forKey:imageId];
+    
     CGFloat cursorLocation = self.contentView.selectedRange.location;
     NTNoteImageEmbeddedModel *imageModel = [[NTNoteImageEmbeddedModel alloc]init];
     imageModel.location = cursorLocation;
-    imageModel.width = 300;
-    imageModel.height = 500;
+    imageModel.width = self.contentView.frame.size.width;
+    imageModel.height = chosenImage.size.height / chosenImage.size.width * imageModel.width;
     imageModel.imageId = imageId;
     [self.imageEmbeddedArr addObject:imageModel];
     
-    UIImage *chosenImage = [info objectForKey:UIImagePickerControllerOriginalImage];
-    [self.imagesDict setObject:chosenImage forKey:imageId];
     
     [picker dismissViewControllerAnimated:YES completion:nil];
     //TODO: 支持选择多种格式图片
@@ -296,10 +297,7 @@
         attachment.image = [self.imagesDict objectForKey:imageModel.imageId];
         attachment.bounds = CGRectMake(0, 0, imageModel.width, imageModel.height);
         NSAttributedString *addictiveStr = [NSAttributedString attributedStringWithAttachment:attachment];
-        [noteContent appendAttributedString:[[NSAttributedString alloc]initWithString:@"\n"]];
         [noteContent insertAttributedString:addictiveStr atIndex:imageModel.location];
-        [noteContent appendAttributedString:[[NSAttributedString alloc]initWithString:@"\n"]];
-
     }
     self.contentView.attributedText = noteContent;
 }
