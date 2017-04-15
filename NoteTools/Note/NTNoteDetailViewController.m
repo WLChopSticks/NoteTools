@@ -156,7 +156,7 @@
 -(void)insertImageBtnClicking
 {
     NSLog(@"点击了加载图片");
-    UIAlertController *insertImage = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *insertImage = [[UIAlertController alloc]init];
     UIAlertAction *imageAlbum = [UIAlertAction actionWithTitle:@"从图库中选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self callImageAlbumBtnClicking];
     }];
